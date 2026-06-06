@@ -49,6 +49,35 @@ std::string reversed(std::string word) {
 }
 
 
+// print array
+template <typename T, std::size_t N>
+void print_array(const std::array<T, N>& arr) {
+    for (std::size_t i = 0; i < N; ++i) {
+        std::print("{}", arr[i]);
+
+        if (i != N - 1) {
+            std::print(", ");
+        }
+    }
+
+    std::println();
+}
+
+// overload for C-style
+template <typename T, std::size_t N>
+void print_array(const T (&arr)[N]) {
+    for (std::size_t i = 0; i < N; ++i) {
+        std::print("{}", arr[i]);
+
+        if (i != N - 1) {
+            std::print(", ");
+        }
+    }
+
+    std::println();
+}
+
+
 int main() {
 
     std::println("\n=== String Reversal Examples ===");
@@ -112,6 +141,38 @@ int main() {
     std::println("Result   : {}", temporary);
 
     // 1 and 4 for general usage and best utility depending on desired outcome, modify original(1), or create copy(4)
+
+    // Array elements modification
+    // 1
+    std::array<std::string, 4> fruits = {"apple", "banana", "orange", "grape"};
+
+    std::println("\n1. reverse_in_place()");
+
+    std::println("Before:");
+    print_array(fruits);
+
+    for (auto& fruit : fruits) {
+        reverse_in_place(fruit);
+    }
+
+    std::println("\nAfter(Modified):");
+    print_array(fruits);
+
+    // 4
+    std::array<std::string, 4> animals = {"hippopotamus", "tiger", "polar bear", "wolverine"};
+
+    std::println("\n4. reversed() \nBefore:");
+    print_array(animals);
+
+    std::println("\nReversed Copies:");
+    for (const auto& animal : animals) {
+        std::print("{}, ", reversed(animal));
+    }
+    std::println();
+
+    std::println("\nOriginal Array Reversal(intact):");
+    print_array(animals);
+
 
     return 0;
 }
