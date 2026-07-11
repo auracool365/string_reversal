@@ -77,10 +77,59 @@ void print_array(const T (&arr)[N]) {
     std::println();
 }
 
+// Non-std library implementations
+
+// pass by reference
+// Time Complexity: O(n). Extra Memory: O(1) modifies the original string directly.
+void reverse_by_ref(std::string &word)
+{
+    std::size_t left = 0;
+    std::size_t right = !word.empty() ? word.size() - 1 : 0;
+
+    // Swap characters from both ends toward the middle(two pointer approach).
+    while (left < right)
+    {
+        const char temp = word[left];
+        word[left] = word[right];
+        word[right] = temp;
+
+        left++;
+        right--;
+    }
+}
+
+// pass by value
+// Reverses a copy of the string, and returns it. Original string (if lvalue was passed) is left untouched.
+// Time Complexity: O(n). Extra Memory: O(n) copy for lvalues, move for rvalues.
+std::string reversed_by_value_1(std::string word)
+{
+    std::size_t left = 0;
+    std::size_t right = !word.empty() ? word.size() - 1 : 0;
+
+    while (left < right)
+    {
+        const char temp = word[left];
+        word[left] = word[right];
+        word[right] = temp;
+
+        left++;
+        right--;
+    }
+
+    return word;
+}
+
+// Technically, pass by value does not need full re-implementation, just pass the argument by value, and use the pass by reference function
+std::string reversed_by_value_2(std::string word) {
+    reverse_by_ref(word);
+    return word;
+}
+
+
 
 int main() {
 
-    std::println("\n=== String Reversal Examples ===");
+    std::println("\nString Reversal Examples");
 
     // 1. In-Place Reversal
     std::string word = "complete";
@@ -173,6 +222,60 @@ int main() {
     std::println("\nOriginal Array Reversal(intact):");
     print_array(animals);
 
+    // Non-library implementation usage
+    std::println("\nRaw String Reversal Examples");
+
+    // pass by reference
+    std::string word_4 = "practice";
+
+    std::println("\n5.Pass by reference In-Place Reversal");
+    std::println("Original : {}", word_4);
+
+    reverse_by_ref(word_4);
+
+    std::println("Reversed : {}", word_4);
+    std::println("Original : {}", word_4);
+
+
+    // Raw Value-Semantics Reversal (pass by value)
+    std::string word_5 = "buffer";
+
+    std::println("\n6.Value-Semantics Reversal");
+    std::println("Original : {}", word_5);
+
+    auto result_raw = reversed_by_value_1(word_5);
+
+    std::println("Result   : {}", result_raw);
+    std::println("Original : {}", word_5);
+
+    // second pass by value function
+    std::string word_6 = "relax";
+
+    std::println("\n6.Value-Semantics Reversal(short hand functon)");
+    std::println("Original : {}", word_6);
+
+    result_raw = reversed_by_value_2(word_6);
+
+    std::println("Result   : {}", result_raw);
+    std::println("Original : {}", word_6);
+
+    // Rvalue usage
+    auto temp_raw = reversed_by_value_1("rvalue_test");
+
+    std::println("\nRvalue Example (raw)");
+    std::println("Result   : {}", temp_raw);
+
+
+    // Edge cases
+    std::string empty_str;
+    std::string single_char = "x";
+
+    reverse_by_ref(empty_str);
+    reverse_by_ref(single_char);
+
+    std::println("\nEdge Cases");
+    std::println("Empty (reversed)      : \"{}\"", empty_str);
+    std::println("Single char (reversed): \"{}\"", single_char);
 
     return 0;
 }
